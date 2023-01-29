@@ -4,6 +4,7 @@ import edu.neu.coe.info6205.util.Benchmark_Timer;
 import edu.neu.coe.info6205.util.TimeLogger;
 import edu.neu.coe.info6205.util.Utilities;
 
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -32,11 +33,28 @@ public class ThreeSumBenchmark {
         new ThreeSumBenchmark(2, 16000, 16000).runBenchmarks();
     }
 
-    private void benchmarkThreeSum(final String description, final Consumer<int[]> function, int n, final TimeLogger[] timeLoggers) {
-        if (description.equals("ThreeSumCubic") && n > 4000) return;
+	private void benchmarkThreeSum(final String description, final Consumer<int[]> function, int n, final TimeLogger[] timeLoggers) {
+	    int[] input = generateInput(n);
+        if (description.equals("ThreeSumCubic")) {
+            function.accept(input);
+        } else if (description.equals("ThreeSumQuadratic")) {
+            function.accept(input);
+        } else if (description.equals("ThreeSumQuadrithmic")) {
+            function.accept(input);
+        }       
         // FIXME
         // END 
     }
+	
+	private int[] generateInput(int n) {
+	    Random rnd = new Random();
+	    int[] input = new int[n];
+	    for (int i = 0; i < n; i++) {
+	        input[i] = rnd.nextInt();
+	    }
+	    return input;
+	}
+
 
     private final static TimeLogger[] timeLoggersCubic = {
             new TimeLogger("Raw time per run (mSec): ", (time, n) -> time),
