@@ -16,7 +16,13 @@ public class InsertionSortBasic {
         for (int i = lo + 1; i < hi; i++) swap(i, a);
     }
 
-    private void swap(int i, Object[] a) {
+	@SuppressWarnings("unchecked")
+	private void swap(int i, Object[] a) {
+	    for (int j = i; j > 0; j--) {
+	        if (((Comparable<Object>)a[j]).compareTo(a[j-1]) < 0)
+	            swap(a, j, j-1);
+	        else break;
+	    }
         // FIXME
         // END 
     }
