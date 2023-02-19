@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
 
-
 public class Main {
 
 	public static void main(String[] args) {
@@ -51,7 +50,7 @@ public class Main {
 				}
 			}
 		}
-		for (int arraySize = 100000; arraySize <= 300000; arraySize += 100000) {
+		for (int arraySize = 150000; arraySize <= 600000; arraySize += 150000) {
 		    for (int j = 50; j < 100; j += 5) {
 		        int cutoff = 100 * (j + 1);
 		        for (int threadCount = 2; threadCount < 65; threadCount = threadCount * 2) {
@@ -61,7 +60,7 @@ public class Main {
 		            }
 		        }
 		    }
-		}
+		}	
 
 		try {
 			FileOutputStream fis = new FileOutputStream("./src/result.csv");
