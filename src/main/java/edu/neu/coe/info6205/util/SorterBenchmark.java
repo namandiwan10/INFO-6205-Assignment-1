@@ -28,6 +28,14 @@ public class SorterBenchmark<T extends Comparable<T>> extends Benchmark_Timer<T[
         final double time = super.runFromSupplier(() -> generateRandomArray(ts), nRuns);
         for (TimeLogger timeLogger : timeLoggers) timeLogger.log(time, N);
     }
+    
+    public double rund(int N) {
+        logger.info("run: sort " + formatWhole(N) + " elements using " + this);
+        sorter.init(N);
+        final double time = super.runFromSupplier(() -> generateRandomArray(ts), nRuns);
+        for (TimeLogger timeLogger : timeLoggers) timeLogger.log(time, N);
+        return time;
+    }
 
     @Override
     public String toString() {
