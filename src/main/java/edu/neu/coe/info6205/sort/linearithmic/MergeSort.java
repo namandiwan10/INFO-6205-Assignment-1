@@ -7,6 +7,11 @@ import edu.neu.coe.info6205.util.Config;
 
 import java.util.Arrays;
 
+/**
+ * Class MergeSort.
+ *
+ * @param <X> the underlying comparable type.
+ */
 public class MergeSort<X extends Comparable<X>> extends SortWithHelper<X> {
 
     public static final String DESCRIPTION = "MergeSort";
@@ -49,7 +54,7 @@ public class MergeSort<X extends Comparable<X>> extends SortWithHelper<X> {
         sort(a, aux, from, to);
     }
 
-    private void sort(X[] a, X[] aux, int from, int to) {
+    public void sort(X[] a, X[] aux, int from, int to) {
         final Helper<X> helper = getHelper();
         Config config = helper.getConfig();
         boolean insurance = config.getBoolean(MERGESORT, INSURANCE);
@@ -60,8 +65,50 @@ public class MergeSort<X extends Comparable<X>> extends SortWithHelper<X> {
         }
 
         // FIXME : implement merge sort with insurance and no-copy optimizations
-        // END 
+        int mid = from + (to - from) / 2;
+        sort(a, aux, from, mid);
+        sort(a, aux, mid, to);
+
+        if (noCopy && !helper.needCopy(a, from, to)) {
+            return; // no need to copy if input array is already sorted
+        }
+
+        if (!insurance || helper.less(a[mid - 1], a[mid])) {
+            merge(a, aux, from, mid, to);
+        } else {
+            // use a modified merge method that includes insurance comparison
+            mergeWithInsurance(a, aux, from, mid, to);
+        }
     }
+    
+    public boolean needCopy(X[] a, int from, int to) {
+        for (int i = from + 1; i < to; i++) {
+            if (less(a[i], a[i - 1])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private void mergeWithInsurance(X[] sorted, X[] result, int from, int mid, int to) {
+        final Helper<X> helper = getHelper();
+        int i = from;
+        int j = mid;
+        for (int k = from; k < to; k++) {
+            if (i >= mid) helper.copy(sorted, j++, result, k);
+            else if (j >= to) helper.copy(sorted, i++, result, k);
+            else if (helper.less(sorted[j], sorted[i])) {
+                helper.incrementFixes(mid - i);
+                helper.copy(sorted, j++, result, k);
+            } else {
+                helper.copy(sorted, i++, result, k);
+            }
+        }
+    }
+
+
+
 
     // CONSIDER combine with MergeSortBasic perhaps.
     private void merge(X[] sorted, X[] result, int from, int mid, int to) {
@@ -90,4 +137,3 @@ public class MergeSort<X extends Comparable<X>> extends SortWithHelper<X> {
 
     private final InsertionSort<X> insertionSort;
 }
-
